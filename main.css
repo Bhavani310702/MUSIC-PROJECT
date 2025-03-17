@@ -68,23 +68,7 @@ header {
   background-color: rgb(245, 72, 9);
   color: black;
 }
-.search i{
-  color: white;
-}
-:root {
-  --bg-color:white;
-  --text-color:black;
-}
 
-.dark-theme {
-  --bg-color: black;
-  --text-color: white;
-}
-
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-}
 
 /* header part end -------------------------------- */
 
@@ -99,14 +83,14 @@ body {
 /* Navbar end------------------------ */
 
 /* slide bar start---------------- */
- #multiItemCarousel{
+ /* #multiItemCarousel{
   background-color: #1b1b1b;
- }
+ } */
 
 /*  slide bar end ----------------- */
-/* main{
+main{
   background-color: #1b1b1b;
-} */
+}
 
 h1{
   padding: 10px;

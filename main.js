@@ -4,6 +4,12 @@ logout.addEventListener("click" ,()=>{
   location.replace("./index.html")
 })
 
+function claimOffer() {
+  alert("Congratulations! You have claimed the $1 trial offer.");
+ 
+  window.location.href = "https://gaana.com/subscribe/buy-gaana-plus?udf=topbar_trial"; 
+}
+
 // songs starts--------------------------------
 let currentAudios = null;
 let currentButton = null;
