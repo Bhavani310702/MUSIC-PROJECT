@@ -99,7 +99,7 @@ let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
         }
 
         function openWishlistPage() {
-            window.location.href = "sample2.html";
+            window.location.href = "wishlist.html";
         }
 
         function togglePlayPause(song, playButton, wishlistButton) {

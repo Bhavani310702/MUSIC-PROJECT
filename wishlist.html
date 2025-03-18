@@ -8,6 +8,7 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
+            background-color: #36424e;
         }
         #wishlist {
             display: flex;
@@ -15,12 +16,15 @@
             gap: 20px;
             justify-content: center;
             margin: 20px;
+           
         }
         .song-item {
             border: 1px solid #ddd;
             padding: 10px;
             border-radius: 8px;
             text-align: center;
+            background-color: #12be77;
+
         }
         .song-item img {
             width: 100px;
@@ -52,7 +56,7 @@
 </head>
 <body>
 
-    <h1>Your Wishlist</h1>
+    <h1><u>Wishlist</u></h1>
     <button id="backButton" onclick="goBack()">Back to Songs</button>
     <div id="wishlist"></div>
 
@@ -68,7 +72,7 @@
                 songElement.classList.add("song-item");
                 songElement.innerHTML = `
                     <img src="${song.img}" alt="${song.title}">
-                    <h6>${song.title}</h6>
+                    <h5>${song.title}</h5>
                     <button class="remove-button" onclick="removeFromWishlist('${song.title}')">❌ Remove</button>
                 `;
                 wishlistContainer.appendChild(songElement);
