@@ -11,82 +11,151 @@ function claimOffer() {
 }
 
 // songs starts--------------------------------
-let currentAudios = null;
-let currentButton = null;
+// let currentAudios = null;
+// let currentButton = null;
 
-fetch("https://vybbii-api-iu8p.onrender.com/songs")
-  .then((response) => response.json())
-  .then((data) => {
-    const container = document.getElementById("Allsongs");
-    container.style.display = "flex";
-    container.style.flexWrap = "wrap";
-    container.style.gap = "20px";
+// fetch("https://vybbii-api-iu8p.onrender.com/songs")
+//   .then((response) => response.json())
+//   .then((data) => {
+//     const container = document.getElementById("Allsongs");
+//     container.style.display = "flex";
+//     container.style.flexWrap = "wrap";
+//     container.style.gap = "20px";
 
-    data.forEach((song) => {
-      const songElement = document.createElement("div");
-      songElement.style.position = "relative";
-      songElement.style.margin = "10px";
-      songElement.style.textAlign = "center";
+//     data.forEach((song) => {
+//       const songElement = document.createElement("div");
+//       songElement.style.position = "relative";
+//       songElement.style.margin = "10px";
+//       songElement.style.textAlign = "center";
 
-      songElement.innerHTML = `
-        <div style="position: relative; display: inline-block;">
-            <img src="${song.img}" alt="${song.title}" style="width:100px; height:100px; display: block; border-radius: 10px;">
-            <button class="play-button" style="position: absolute; top: 40%; left: 40%; transform: translate(-50%, -50%); border: none;  cursor: pointer; border-radius: 10%; padding: 5px;">
-                <i class="ri-play-circle-line" style="font-size: 35px; colorL:black;"></i>
-            </button>
-            <h6 style="margin-top: 8px; color: white;">${song.title}</h6>
-        </div>
-        `;
+//       songElement.innerHTML = `
+//         <div style="position: relative; display: inline-block;">
+//             <img src="${song.img}" alt="${song.title}" style="width:100px; height:100px; display: block; border-radius: 10px;">
+//             <button class="play-button" style="position: absolute; top: 40%; left: 40%; transform: translate(-50%, -50%); border: none;  cursor: pointer; border-radius: 10%; padding: 5px;">
+//                 <i class="ri-play-circle-line" style="font-size: 35px; colorL:black;"></i>
+//             </button>
+//             <h6 style="margin-top: 8px; color: white;">${song.title}</h6>
+//         </div>
+//         `;
 
-      const playButton = songElement.querySelector(".play-button");
+//       const playButton = songElement.querySelector(".play-button");
 
-      playButton.addEventListener("click", () => {
-        togglePlayPause(song.audiourl, playButton);
-      });
+//       playButton.addEventListener("click", () => {
+//         togglePlayPause(song.audiourl, playButton);
+//       });
 
-      container.appendChild(songElement);
-    });
-  })
-  .catch((error) => console.error("Error fetching songs:", error));
+//       container.appendChild(songElement);
+//     });
+//   })
+//   .catch((error) => console.error("Error fetching songs:", error));
 
-function togglePlayPause(audiourl, button) {
-  // If the same song is playing, toggle play/pause
-  if (currentAudios && currentAudios.src === audiourl) {
-    if (currentAudios.paused) {
-      currentAudios.play();
-      button.innerHTML =
-        '<i class="ri-pause-circle-line" style="font-size: 32px; color: white;"></i>';
-    } else {
-      currentAudios.pause();
-      button.innerHTML =
-        '<i class="ri-play-circle-line" style="font-size: 32px; color: white;"></i>';
-    }
-  } else {
-    // Stop the currently playing song
-    if (currentAudios) {
-      currentAudios.pause();
-      if (currentButton) {
-        currentButton.innerHTML =
-          '<i class="ri-play-circle-line" style="font-size: 32px; color: white;"></i>';
-      }
-    }
+// function togglePlayPause(audiourl, button) {
+//   if (currentAudios && currentAudios.src === audiourl) {
+//     if (currentAudios.paused) {
+//       currentAudios.play();
+//       button.innerHTML =
+//         '<i class="ri-pause-circle-line" style="font-size: 32px; color: white;"></i>';
+//     } else {
+//       currentAudios.pause();
+//       button.innerHTML =
+//         '<i class="ri-play-circle-line" style="font-size: 32px; color: white;"></i>';
+//     }
+//   } else {
+//     if (currentAudios) {
+//       currentAudios.pause();
+//       if (currentButton) {
+//         currentButton.innerHTML =
+//           '<i class="ri-play-circle-line" style="font-size: 32px; color: white;"></i>';
+//       }
+//     }
 
-    // Play the new song
-    currentAudios = new Audio(audiourl);
-    currentAudios.play();
-    currentButton = button;
-    button.innerHTML =
-      '<i class="ri-pause-circle-line" style="font-size: 32px; color: white;"></i>';
+//     // Play the new song
+//     currentAudios = new Audio(audiourl);
+//     currentAudios.play();
+//     currentButton = button;
+//     button.innerHTML =
+//       '<i class="ri-pause-circle-line" style="font-size: 32px; color: white;"></i>';
 
-    // When song ends, reset the button
-    currentAudios.addEventListener("ended", () => {
-      button.innerHTML =
-        '<i class="ri-play-circle-line" style="font-size: 32px; color: white;"></i>';
-      currentAudios = null;
-      currentButton = null;
-    });
-  }
-}
+//     currentAudios.addEventListener("ended", () => {
+//       button.innerHTML =
+//         '<i class="ri-play-circle-line" style="font-size: 32px; color: white;"></i>';
+//       currentAudios = null;
+//       currentButton = null;
+//     });
+//   }
+// }
+
+let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+        let currentAudios = null;
+        let currentPlayButton = null;
+
+        function addToWishlist(song, button) {
+            if (!wishlist.some(item => item.title === song.title)) {
+                wishlist.push(song);
+                localStorage.setItem("wishlist", JSON.stringify(wishlist));
+                button.innerText = "❤️ Added";
+                alert(`${song.title} added to wishlist!`);
+            }
+        }
+
+        function openWishlistPage() {
+            window.location.href = "sample2.html";
+        }
+
+        function togglePlayPause(song, playButton, wishlistButton) {
+            if (currentAudio && currentAudio.src === song.audiourl) {
+                if (currentAudios.paused) {
+                    currentAudios.play();
+                    playButton.innerText = "⏸ Pause";
+                } else {
+                    currentAudios.pause();
+                    playButton.innerText = "▶️ Play";
+                }
+            } else {
+                if (currentAudios) {
+                    currentAudios.pause();
+                    if (currentPlayButton) currentPlayButton.innerText = "▶️ Play";
+                }
+
+                currentAudios = new Audio(song.audiourl);
+                currentAudios.play();
+                playButton.innerText = "⏸ Pause";
+                currentPlayButton = playButton;
+
+                currentAudios.addEventListener("ended", () => {
+                    playButton.innerText = "▶️ Play";
+                });
+
+                // Also add to wishlist
+                addToWishlist(song, wishlistButton);
+            }
+        }
+
+        fetch("https://vybbii-api-iu8p.onrender.com/songs")
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById("Allsongs");
+                data.forEach(song => {
+                    const songElement = document.createElement("div");
+                    songElement.classList.add("song-item");
+                    songElement.innerHTML = `
+                        <img src="${song.img}" alt="${song.title}">
+                        <h6>${song.title}</h6>
+                        <button class="play-button">▶️</button>
+                        <button class="wishlist-button">❤️</button>
+                    `;
+
+                    const playButton = songElement.querySelector(".play-button");
+                    const wishlistButton = songElement.querySelector(".wishlist-button");
+
+                    playButton.addEventListener("click", () => togglePlayPause(song, playButton, wishlistButton));
+                    wishlistButton.addEventListener("click", () => addToWishlist(song, wishlistButton));
+
+                    container.appendChild(songElement);
+                });
+            })
+            .catch(error => console.error("Error fetching songs:", error));
+// all songs---------------------------------------------
 
 fetch("https://679bb6bd33d316846324dfe5.mockapi.io/songs")
   .then((response) => response.json())
@@ -97,7 +166,6 @@ fetch("https://679bb6bd33d316846324dfe5.mockapi.io/songs")
       songElement.innerHTML = `
       <div>
         <img src="${song.image}" alt="${song.title}" style="width:100px;height:100px;">
-        <button class="play-button"><i class="ri-play-circle-line"></i></button>
         <h6>${song.title}</h6>
       </div>
     `;
@@ -121,33 +189,74 @@ fetch("https://679bb6bd33d316846324dfe5.mockapi.io/songs")
 // Top charts---------------------------------
 
 fetch("https://679bb6bd33d316846324dfe5.mockapi.io/Artists")
-  .then((response) => response.json())
-  .then((data) => {
-    const container = document.getElementById("artist");
-    data.forEach((song) => {
-      const songElement = document.createElement("div");
-      songElement.innerHTML = `
-      <div>
-        <img src="${song.image}" alt="${song.title}" style="width:100px;height:100px;">
-       <h6>${song.name}</h6>
-      </div>
-    `;
-      container.appendChild(songElement);
-    });
-    // Auto-scroll function
-    function autoScroll() {
-      container.scrollLeft += 1;
-      if (
-        container.scrollLeft >=
-        container.scrollWidth - container.clientWidth
-      ) {
-        container.scrollLeft = 0;
-      }
-    }
+.then((response) => response.json())
+.then((data) => {
+  const artistContainer = document.getElementById("artist");
+  const artistDetails = document.getElementById("artistDetails");
 
-    setInterval(autoScroll, 50);
-  })
-  .catch((error) => console.error("Error fetching data:", error));
+  function showArtists() {
+    artistContainer.innerHTML = "";
+    artistDetails.style.display = "none";
+    artistContainer.style.display = "flex";
+
+    data.forEach((artist) => {
+      const artistDiv = document.createElement("div");
+      artistDiv.classList.add("artist-item");
+      artistDiv.innerHTML = `
+                <img src="${artist.image}" alt="${artist.name}">
+                <h6>${artist.name}</h6>
+            `;
+      artistDiv.addEventListener("click", () =>
+        showArtistDetails(artist)
+      );
+      artistContainer.appendChild(artistDiv);
+    });
+
+    startAutoScroll(); 
+  }
+  function showArtistDetails(artist) {
+    artistContainer.style.display = "none";
+    artistDetails.style.display = "block";
+    artistDetails.innerHTML = `
+            <button id="backButton">Go Back</button>
+            <h2>${artist.name}</h2>
+            <img src="${artist.image}" alt="${artist.name}">
+            <p>${artist.bio || "No bio available."}</p>
+            <h3>Songs</h3>
+            <ul>
+                ${
+                  artist.famousSongs && artist.famousSongs.length > 0
+                    ? artist.famousSongs
+                        .map((famousSongs) => `<li>${famousSongs}</li>`)
+                        .join("")
+                    : "<li>No songs available.</li>"
+                }
+            </ul>
+        `;
+    document
+      .getElementById("backButton")
+      .addEventListener("click", showArtists);
+  }
+
+  // Auto-scroll function
+  function startAutoScroll() {
+    let scrollAmount = 0;
+    let slideTimer = setInterval(() => {
+      artistContainer.scrollLeft += 1;
+      scrollAmount += 1;
+      if (
+        scrollAmount >=
+        artistContainer.scrollWidth - artistContainer.clientWidth
+      ) {
+        artistContainer.scrollLeft = 0; // Reset to start when reached end
+        scrollAmount = 0;
+      }
+    }, 50);
+  }
+
+  showArtists(); // Load the artists
+})
+.catch((error) => console.error("Error fetching data:", error));
 
 // Artists-----------------------------------------------
 
